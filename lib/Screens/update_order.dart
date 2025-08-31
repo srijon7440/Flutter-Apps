@@ -26,11 +26,12 @@ class _UpdateOrderState extends State<UpdateOrder> {
   @override
   void initState(){
     super.initState();
-    _orderNameController.text=widget.product.name;
-    _codeController.text=widget.product.name.toString();
-    _priceController.text=widget.product.name.toString();
-    _quantityController.text=widget.product.name.toString();
-    _imageController.text=widget.product.name;
+    _orderNameController.text = widget.product.name;
+    _codeController.text = widget.product.code.toString();
+    _priceController.text = widget.product.price.toString();
+    _quantityController.text = widget.product.quantity.toString();
+    _imageController.text = widget.product.img;
+
 
   }
   @override
@@ -137,7 +138,6 @@ class _UpdateOrderState extends State<UpdateOrder> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
-                keyboardType: TextInputType.number,
                 controller: _imageController,
                 decoration: InputDecoration(
                     labelText: 'image',
@@ -174,7 +174,7 @@ class _UpdateOrderState extends State<UpdateOrder> {
       _updateProductInProgress=true;
       setState(() {});
       //prepare url
-      Uri uri=Uri.parse('http://35.73.30.144:2008/api/v1/CreateProduct');
+      Uri uri=Uri.parse('http://35.73.30.144:2008/api/v1/UpdateProduct/65abe919f68794d36c5b7ffa');
       //prepare data
       int totalPrice=int.parse(_priceController.text)*int.parse(_quantityController.text);
       Map<String,dynamic> requestBody={
@@ -182,7 +182,7 @@ class _UpdateOrderState extends State<UpdateOrder> {
         "ProductCode": int.parse(_codeController.text.trim()),
         "Img": _imageController.text,
         "Qty": int.parse(_quantityController.text.trim()),
-        "UnitPrice": _priceController.text.trim(),
+        "UnitPrice": int.parse(_priceController.text.trim()),
         "TotalPrice": (totalPrice)
       };
       //request data
