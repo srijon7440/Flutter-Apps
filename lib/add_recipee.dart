@@ -9,66 +9,78 @@ class AddRecipe extends StatefulWidget {
 }
 
 class _AddRecipeState extends State<AddRecipe> {
-  final GlobalKey<FormState>_formKey=GlobalKey<FormState>();
-  TextEditingController itemController=TextEditingController();
-  TextEditingController descriptionController=TextEditingController();
-  TextEditingController ingredientsController=TextEditingController();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController itemController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController ingredientsController = TextEditingController(); // comma-separated string
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recipee'),
+        title: Text('Add Recipe'),
       ),
       body: Form(
-          key: _formKey,
-          child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              textInputAction: TextInputAction.next,
-              controller: itemController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                hintText: 'Item',
-                labelText: 'Item'
+        key: _formKey,
+        child: Column(
+          children: [
+            // Title
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                textInputAction: TextInputAction.next,
+                controller: itemController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                  hintText: 'Title',
+                  labelText: 'Title',
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              textInputAction: TextInputAction.next,
-              controller: descriptionController,
-              decoration: InputDecoration(
+            // Description
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                textInputAction: TextInputAction.next,
+                controller: descriptionController,
+                decoration: InputDecoration(
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
                   hintText: 'Description',
-                  labelText: 'Description'
+                  labelText: 'Description',
+                ),
               ),
             ),
-          ),
-
-          //ingredients
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: ingredientsController,
-              decoration: InputDecoration(
+            // Ingredients
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                controller: ingredientsController,
+                decoration: InputDecoration(
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                  hintText: 'ingredients',
-                  labelText: 'ingredients'
+                  hintText: 'Ingredients (comma separated)',
+                  labelText: 'Ingredients',
+                ),
               ),
             ),
-          ),
+            ElevatedButton(
+              onPressed: () {
+                List<String> ingredientsList = ingredientsController.text
+                    .split(',')
+                    .map((e) => e.trim())
+                    .toList();
 
-          ElevatedButton(onPressed: (){
-            Recipe recipe=Recipe(title: itemController.text, description: descriptionController.text, ingredients: ingredientsController.text);
-            Navigator.pop(context,recipe);
-          }, child: Text('Save'))
-        ],
-      )),
+                Recipe recipe = Recipe(
+                  title: itemController.text,
+                  description: descriptionController.text,
+                  ingredients: ingredientsList,
+                );
+                Navigator.pop(context, recipe);
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

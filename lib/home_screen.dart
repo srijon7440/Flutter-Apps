@@ -9,7 +9,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Recipe>recipeList=[];
+  List<Recipe> recipeList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,50 +20,67 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-                'Food Recipes',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.white,
-                fontWeight: FontWeight.bold
-            ),
+              'Food Recipes',
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
       ),
       body: ListView.builder(
-         itemCount: recipeList.length,
-          itemBuilder: (context,index){
-           Recipe recipe=recipeList[index];
-           return ListTile(
+        itemCount: recipeList.length,
+        itemBuilder: (context, index) {
+          Recipe recipe = recipeList[index];
+          return ListTile(
             title: Text(recipe.title),
-             subtitle: Text(recipe.description),
-             leading: CircleAvatar(
-               backgroundImage: NetworkImage(
-                 'https://marketplace.canva.com/EAFaFUz4aKo/3/0/1600w/canva-yellow-abstract-cooking-fire-free-logo-tn1zF-_cG9c.jpg'
-               ),
-             )
-           );
-      }),
+            subtitle: Text(recipe.description),
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(
+                'https://marketplace.canva.com/EAFaFUz4aKo/3/0/1600w/canva-yellow-abstract-cooking-fire-free-logo-tn1zF-_cG9c.jpg',
+              ),
+            ),
+            onTap: () {
+              // Optional: Show ingredients on tap
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text(recipe.title),
+                  content: Text('Ingredients:\n${recipe.ingredients.join(', ')}'),
+                ),
+              );
+            },
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
-       Recipe recipe= await Navigator.push(context, MaterialPageRoute(builder: (context)=>AddRecipe()));
-       if(recipe!=null){
-         recipeList.add(recipe);
-         setState(() {});
-       }
-        },child: Icon(Icons.add),),
+        onPressed: () async {
+          Recipe? recipe = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddRecipe()),
+          );
+          if (recipe != null) {
+            setState(() {
+              recipeList.add(recipe);
+            });
+          }
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
-class Recipe{
+
+class Recipe {
   final String title;
   final String description;
-  final String ingredients;
-  Recipe(
-  {
+  final List<String> ingredients;
+
+  Recipe({
     required this.title,
     required this.description,
-    required this.ingredients
-}
-      );
+    required this.ingredients,
+  });
 }
