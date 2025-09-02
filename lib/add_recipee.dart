@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/home_screen.dart';
 
 class AddRecipe extends StatefulWidget {
   const AddRecipe({super.key});
@@ -11,7 +12,7 @@ class _AddRecipeState extends State<AddRecipe> {
   final GlobalKey<FormState>_formKey=GlobalKey<FormState>();
   TextEditingController itemController=TextEditingController();
   TextEditingController descriptionController=TextEditingController();
-  TextEditingController imageController=TextEditingController();
+  TextEditingController ingredientsController=TextEditingController();
 
 
   @override
@@ -49,18 +50,23 @@ class _AddRecipeState extends State<AddRecipe> {
             ),
           ),
 
+          //ingredients
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
-              controller: imageController,
+              controller: ingredientsController,
               decoration: InputDecoration(
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                  hintText: 'image',
-                  labelText: 'image'
+                  hintText: 'ingredients',
+                  labelText: 'ingredients'
               ),
             ),
           ),
-          ElevatedButton(onPressed: (){}, child: Text('Save'))
+
+          ElevatedButton(onPressed: (){
+            Recipe recipe=Recipe(title: itemController.text, description: descriptionController.text, ingredients: ingredientsController.text);
+            Navigator.pop(context,recipe);
+          }, child: Text('Save'))
         ],
       )),
     );
